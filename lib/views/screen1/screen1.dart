@@ -13,12 +13,13 @@ class Screen1 extends StatefulWidget {
 }
 
 class _Screen1State extends State<Screen1> {
+  TextEditingController myController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     BodyMassindex bmi = BodyMassindex();
     // bmi.gewicht = _gewicht;
 
-    double _bmi = bmi.gewicht / (bmi.groesse * bmi.groesse / 10000);
+    double _bmi = bmi.gewicht / (bmi.groesse * bmi.groesse);
     String bmass = _bmi.toStringAsFixed(2);
     double _sliderBmi;
     if (_bmi.isNaN || _bmi.isInfinite) {
@@ -47,7 +48,7 @@ class _Screen1State extends State<Screen1> {
           leading: TextButton(
               style: TextButton.styleFrom(padding: EdgeInsets.only(top: 5)),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => const Screen2(title: 'Page 1'),
@@ -60,10 +61,9 @@ class _Screen1State extends State<Screen1> {
           title: Text('ideal Gewicht'),
         ),
         body: Container(
-          color: Color.fromARGB(255, 194, 165, 206),
+          color: Color.fromARGB(255, 105, 197, 140),
           child: Column(
             children: <Widget>[
-              Container(),
               Container(
                 margin: EdgeInsets.fromLTRB(10, 200, 10, 50),
                 padding: EdgeInsets.all(5),
@@ -74,14 +74,14 @@ class _Screen1State extends State<Screen1> {
                   color: Colors.white70,
                   child: Center(
                     child: TextFormField(
+                      controller: myController,
                       initialValue: '',
                       decoration: InputDecoration(labelText: 'Gewicht in Kg'),
                       textAlign: TextAlign.center,
                       onChanged: (value) {
-                        final gewicht = double.tryParse(value);
-                        if (gewicht != null) {
+                        if (value != null) {
                           setState(() {
-                            bmi.gewicht = gewicht;
+                            bmi.gewicht = double.tryParse(value)!;
                           });
                         }
                       },
@@ -103,10 +103,9 @@ class _Screen1State extends State<Screen1> {
                       decoration: InputDecoration(labelText: 'Größe in cm'),
                       textAlign: TextAlign.center,
                       onChanged: (value) {
-                        var groesse = double.tryParse(value);
-                        if (groesse != null) {
+                        if (value != null) {
                           setState(() {
-                            bmi.groesse = groesse;
+                            bmi.groesse = double.tryParse(value)!;
                           });
                         }
                       },
@@ -199,7 +198,7 @@ class _Screen1State extends State<Screen1> {
               Container(
                 width: double.infinity,
                 child: Text(
-                  "$bmass",
+                  "${bmass}",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 40.0,

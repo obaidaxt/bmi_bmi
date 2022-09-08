@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bmi_bmi/models/bmi.dart';
-
 import '../screen1/screen1.dart';
 
 class Screen2 extends StatefulWidget {
@@ -36,9 +35,11 @@ class _Screen2State extends State<Screen2> {
           leading: TextButton(
               style: TextButton.styleFrom(padding: EdgeInsets.only(top: 5)),
               onPressed: () {
-                Navigator.pop(
-                  context,
-                );
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Screen1(title: 'Page 2'),
+                    ));
               },
               child: Text(
                 'Vorne',
@@ -50,7 +51,6 @@ class _Screen2State extends State<Screen2> {
           color: Color.fromARGB(255, 194, 165, 206),
           child: Column(
             children: <Widget>[
-              Container(),
               Container(
                 margin: EdgeInsets.fromLTRB(10, 200, 10, 50),
                 padding: EdgeInsets.all(5),

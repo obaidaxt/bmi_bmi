@@ -1,3 +1,5 @@
+import 'dart:math';
+
 class BodyMassindex {
   double gewicht;
   double groesse;
@@ -6,6 +8,7 @@ class BodyMassindex {
     if (groesse <= 0) {
       return null;
     }
-    return gewicht / (groesse * groesse);
+    final result = gewicht / pow(groesse, 2);
+    return result;
   }
 }
