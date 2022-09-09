@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Screen1 extends StatefulWidget {
-  const Screen1({Key? key, required this.title}) : super(key: key);
-
+  Screen1({Key? key, required this.title, required this.bmi}) : super(key: key);
+  final BodyMassindex bmi;
   final String title;
 
   @override
@@ -13,11 +13,11 @@ class Screen1 extends StatefulWidget {
 }
 
 class _Screen1State extends State<Screen1> {
-  TextEditingController myController = TextEditingController();
+  TextEditingController myControllerInKg = TextEditingController();
+  TextEditingController myControllerInCm = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    BodyMassindex bmi = BodyMassindex();
-    // bmi.gewicht = _gewicht;
+    BodyMassindex bmi = widget.bmi;
 
     double _bmi = bmi.gewicht / (bmi.groesse * bmi.groesse);
     String bmass = _bmi.toStringAsFixed(2);
@@ -34,6 +34,10 @@ class _Screen1State extends State<Screen1> {
     }
 
     return MaterialApp(
+      theme: ThemeData.dark().copyWith(
+        primaryColor: Color(0xFF0A0E21),
+        scaffoldBackgroundColor: Color(0xFF0A0E21),
+      ),
       home: Scaffold(
         appBar: AppBar(
           // leading: IconButton(
@@ -51,7 +55,7 @@ class _Screen1State extends State<Screen1> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Screen2(title: 'Page 1'),
+                      builder: (context) => Screen2(title: 'Page 1', bmi: bmi),
                     ));
               },
               child: Text(
@@ -74,15 +78,17 @@ class _Screen1State extends State<Screen1> {
                   color: Colors.white70,
                   child: Center(
                     child: TextFormField(
-                      controller: myController,
-                      initialValue: '',
+                      controller: myControllerInKg,
                       decoration: InputDecoration(labelText: 'Gewicht in Kg'),
                       textAlign: TextAlign.center,
                       onChanged: (value) {
                         if (value != null) {
-                          setState(() {
-                            bmi.gewicht = double.tryParse(value)!;
-                          });
+                          final input = double.tryParse(value);
+                          if (input != null) {
+                            setState(() {
+                              bmi.gewicht = input;
+                            });
+                          }
                         }
                       },
                     ),
@@ -99,11 +105,13 @@ class _Screen1State extends State<Screen1> {
                   color: Colors.white70,
                   child: Center(
                     child: TextFormField(
-                      initialValue: '',
+                      controller: myControllerInCm,
                       decoration: InputDecoration(labelText: 'Größe in cm'),
                       textAlign: TextAlign.center,
                       onChanged: (value) {
-                        if (value != null) {
+                        if (value == null || value.isEmpty) {
+                          return;
+                        } else {
                           setState(() {
                             bmi.groesse = double.tryParse(value)!;
                           });
@@ -125,50 +133,6 @@ class _Screen1State extends State<Screen1> {
               // ),
               // ),
 
-              Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(5),
-                child: Stack(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 10,
-                          child: Container(
-                            height: 50,
-                            color: Color.fromARGB(255, 21, 132, 223),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 7,
-                          child: Container(
-                            height: 50,
-                            color: Colors.green,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 15,
-                          child: Container(
-                            height: 50,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Slider(
-                      value: _sliderBmi,
-                      max: 40,
-                      min: 8,
-                      // label: _bmi.round().toString(),
-                      onChanged: (double value) {
-                        // setState(() {
-                        //   _bmi = value;
-                        // });
-                      },
-                    ),
-                  ],
-                ),
-              ),
               // Container(
               //   color: Colors.white,
               //   child: TextButton(
@@ -183,7 +147,7 @@ class _Screen1State extends State<Screen1> {
               Container(
                 width: double.infinity,
                 child: Text(
-                  "Screen1 dein Bmi ist:",
+                  "dein Bmi ist:",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24.0,

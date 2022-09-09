@@ -8,7 +8,7 @@ class BodyMassindex {
     if (groesse <= 0) {
       return null;
     }
-    final result = gewicht / pow(groesse, 2);
-    return result;
+    final bmi= gewicht / pow(groesse, 2);
+    return bmi;
   }
 }

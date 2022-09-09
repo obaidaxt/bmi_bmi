@@ -4,8 +4,9 @@ import 'package:bmi_bmi/models/bmi.dart';
 import '../screen1/screen1.dart';
 
 class Screen2 extends StatefulWidget {
-  const Screen2({Key? key, required String title}) : super(key: key);
-
+  Screen2({Key? key, required String title, required this.bmi})
+      : super(key: key);
+  final BodyMassindex bmi;
   @override
   State<Screen2> createState() => _Screen2State();
 }
@@ -13,7 +14,7 @@ class Screen2 extends StatefulWidget {
 class _Screen2State extends State<Screen2> {
   @override
   Widget build(BuildContext context) {
-    BodyMassindex bmi = BodyMassindex();
+    BodyMassindex bmi = widget.bmi;
 
     double _bmi = bmi.gewicht / (bmi.groesse * bmi.groesse);
     String bmass = _bmi.toStringAsFixed(2);
@@ -38,7 +39,10 @@ class _Screen2State extends State<Screen2> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const Screen1(title: 'Page 2'),
+                      builder: (context) => Screen1(
+                        title: 'Page 2',
+                        bmi: bmi,
+                      ),
                     ));
               },
               child: Text(
@@ -52,55 +56,111 @@ class _Screen2State extends State<Screen2> {
           child: Column(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.fromLTRB(10, 200, 10, 50),
-                padding: EdgeInsets.all(5),
-                color: Colors.green,
-                child: Container(
-                  width: double.infinity,
-                  height: 55,
-                  color: Colors.white70,
-                  child: Center(
-                    child: TextFormField(
-                      initialValue: '',
-                      decoration: InputDecoration(labelText: 'Gewicht in Kg'),
-                      textAlign: TextAlign.center,
-                      onChanged: (value) {
-                        final gewicht = double.tryParse(value);
-                        if (gewicht != null) {
-                          setState(() {
-                            bmi.gewicht = gewicht;
-                          });
-                        }
-                      },
-                    ),
+                width: double.infinity,
+                child: Text(
+                  "dein Groesse ist: ${bmi.groesse}",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
               Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(5),
-                color: Colors.green,
-                child: Container(
-                  width: double.infinity,
-                  height: 55,
-                  color: Colors.white70,
-                  child: Center(
-                    child: TextFormField(
-                      initialValue: '',
-                      decoration: InputDecoration(labelText: 'Größe in cm'),
-                      textAlign: TextAlign.center,
-                      onChanged: (value) {
-                        var groesse = double.tryParse(value);
-                        if (groesse != null) {
-                          setState(() {
-                            bmi.groesse = groesse;
-                          });
-                        }
-                      },
-                    ),
+                margin: EdgeInsets.fromLTRB(50, 50, 50, 15),
+                child: Slider(
+                  value: bmi.groesse,
+                  onChanged: (value) {
+                    setState(() {
+                      bmi.groesse = value;
+                    });
+                  },
+                  min: 10,
+                  max: 250,
+                  divisions: 300,
+                  label: bmi.groesse.round().toString(),
+                  activeColor: Color.fromARGB(255, 31, 72, 141),
+                  inactiveColor: Colors.blueGrey,
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                child: Text(
+                  "dein Gewicht ist: ${bmi.gewicht}",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+              Container(
+                margin: EdgeInsets.fromLTRB(50, 50, 50, 15),
+                child: Slider(
+                  value: bmi.gewicht,
+                  onChanged: (value) {
+                    setState(() {
+                      bmi.gewicht = value;
+                    });
+                  },
+                  min: 50,
+                  max: 250,
+                  divisions: 200,
+                  label: bmi.gewicht.round().toString(),
+                  activeColor: Color.fromARGB(255, 31, 72, 141),
+                  inactiveColor: Colors.blueGrey,
+                ),
+              ),
+              // Container(
+              //   margin: EdgeInsets.fromLTRB(10, 200, 10, 50),
+              //   padding: EdgeInsets.all(5),
+              //   color: Colors.green,
+              //   child: Container(
+              //     width: double.infinity,
+              //     height: 55,
+              //     color: Colors.white70,
+              //     child: Center(
+              //       child: TextFormField(
+              //         initialValue: '',
+              //         decoration: InputDecoration(labelText: 'Gewicht in Kg'),
+              //         textAlign: TextAlign.center,
+              //         onChanged: (value) {
+              //           final gewicht = double.tryParse(value);
+              //           if (gewicht != null) {
+              //             setState(() {
+              //               bmi.gewicht = gewicht;
+              //             });
+              //           }
+              //         },
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Container(
+              //   margin: EdgeInsets.all(10),
+              //   padding: EdgeInsets.all(5),
+              //   color: Colors.green,
+              //   child: Container(
+              //     width: double.infinity,
+              //     height: 55,
+              //     color: Colors.white70,
+              //     child: Center(
+              //       child: TextFormField(
+              //         initialValue: '',
+              //         decoration: InputDecoration(labelText: 'Größe in cm'),
+              //         textAlign: TextAlign.center,
+              //         onChanged: (value) {
+              //           var groesse = double.tryParse(value);
+              //           if (groesse != null) {
+              //             setState(() {
+              //               bmi.groesse = groesse;
+              //             });
+              //           }
+              //         },
+              //       ),
+              //     ),
+              //   ),
+              // ),
               // Container(
               // margin: EdgeInsets.all(90),
               // padding: EdgeInsets.all(50),
@@ -144,6 +204,9 @@ class _Screen2State extends State<Screen2> {
                       ],
                     ),
                     Slider(
+                      activeColor: _sliderBmi > 28 || _sliderBmi < 18
+                          ? Color.fromARGB(255, 247, 14, 14)
+                          : Color.fromARGB(255, 7, 255, 102),
                       value: _sliderBmi,
                       max: 40,
                       min: 8,
@@ -171,7 +234,7 @@ class _Screen2State extends State<Screen2> {
               Container(
                 width: double.infinity,
                 child: Text(
-                  "Screen2 dein Bmi ist:",
+                  "dein Bmi ist:",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24.0,

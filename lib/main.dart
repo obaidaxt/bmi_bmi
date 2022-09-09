@@ -1,12 +1,16 @@
+import 'package:bmi_bmi/models/bmi.dart';
 import 'package:bmi_bmi/views/screen1/screen1.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({
+    Key? key,
+  }) : super(key: key);
+  final bmi = BodyMassindex();
 
   // This widget is the root of your application.
   @override
@@ -25,7 +29,10 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const Screen1(title: 'Flutter Demo Home Page'),
+      home: Screen1(
+        title: 'Flutter Demo Home Page',
+        bmi: bmi,
+      ),
     );
   }
 }
