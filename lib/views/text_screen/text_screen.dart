@@ -1,25 +1,32 @@
 import 'package:bmi_bmi/models/bmi.dart';
-import 'package:bmi_bmi/views/screen2/screen2.dart';
+import 'package:bmi_bmi/views/slider_screen/slider_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class Screen1 extends StatefulWidget {
-  Screen1({Key? key, required this.title, required this.bmi}) : super(key: key);
+class TextScreen extends StatefulWidget {
+  TextScreen({Key? key, required this.title, required this.bmi})
+      : super(key: key);
   final BodyMassindex bmi;
   final String title;
 
   @override
-  State<Screen1> createState() => _Screen1State();
+  State<TextScreen> createState() => _TextScreenState();
 }
 
-class _Screen1State extends State<Screen1> {
+class _TextScreenState extends State<TextScreen> {
   TextEditingController myControllerInKg = TextEditingController();
   TextEditingController myControllerInCm = TextEditingController();
+  bool isFirstTime = true;
+
   @override
   Widget build(BuildContext context) {
     BodyMassindex bmi = widget.bmi;
-
-    double _bmi = bmi.gewicht / (bmi.groesse * bmi.groesse);
+    if (isFirstTime) {
+      myControllerInCm.text = bmi.groesse.toStringAsFixed(1);
+      myControllerInKg.text = bmi.gewicht.toStringAsFixed(1);
+      isFirstTime = false;
+    }
+    double _bmi = bmi.gewicht * 10000 / (bmi.groesse * bmi.groesse);
     String bmass = _bmi.toStringAsFixed(2);
     double _sliderBmi;
     if (_bmi.isNaN || _bmi.isInfinite) {
@@ -55,7 +62,8 @@ class _Screen1State extends State<Screen1> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Screen2(title: 'Page 1', bmi: bmi),
+                      builder: (context) =>
+                          SliderScreen(title: 'Page 1', bmi: bmi),
                     ));
               },
               child: Text(

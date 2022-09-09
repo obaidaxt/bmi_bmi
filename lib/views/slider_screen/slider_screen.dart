@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bmi_bmi/models/bmi.dart';
-import '../screen1/screen1.dart';
+import '../text_screen/text_screen.dart';
 
-class Screen2 extends StatefulWidget {
-  Screen2({Key? key, required String title, required this.bmi})
+class SliderScreen extends StatefulWidget {
+  SliderScreen({Key? key, required String title, required this.bmi})
       : super(key: key);
   final BodyMassindex bmi;
   @override
-  State<Screen2> createState() => _Screen2State();
+  State<SliderScreen> createState() => _SliderScreenState(bmi);
 }
 
-class _Screen2State extends State<Screen2> {
+class _SliderScreenState extends State<SliderScreen> {
+  _SliderScreenState(BodyMassindex bmi);
+
   @override
   Widget build(BuildContext context) {
     BodyMassindex bmi = widget.bmi;
 
-    double _bmi = bmi.gewicht / (bmi.groesse * bmi.groesse);
+    double _bmi = bmi.gewicht * 10000 / (bmi.groesse * bmi.groesse);
     String bmass = _bmi.toStringAsFixed(2);
     double _sliderBmi;
     if (_bmi.isNaN || _bmi.isInfinite) {
@@ -39,7 +41,7 @@ class _Screen2State extends State<Screen2> {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => Screen1(
+                      builder: (context) => TextScreen(
                         title: 'Page 2',
                         bmi: bmi,
                       ),

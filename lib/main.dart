@@ -1,5 +1,5 @@
 import 'package:bmi_bmi/models/bmi.dart';
-import 'package:bmi_bmi/views/screen1/screen1.dart';
+import 'package:bmi_bmi/views/text_screen/text_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Screen1(
+      home: TextScreen(
         title: 'Flutter Demo Home Page',
         bmi: bmi,
       ),
