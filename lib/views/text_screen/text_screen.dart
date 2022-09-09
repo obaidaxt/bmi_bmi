@@ -1,26 +1,26 @@
+import 'package:bmi_bmi/main.dart';
 import 'package:bmi_bmi/models/bmi.dart';
 import 'package:bmi_bmi/views/slider_screen/slider_screen.dart';
+import 'package:bmi_bmi/widgets/bmi_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TextScreen extends StatefulWidget {
-  TextScreen({Key? key, required this.title, required this.bmi})
-      : super(key: key);
-  final BodyMassindex bmi;
-  final String title;
+class TextScreen extends ConsumerStatefulWidget {
+  TextScreen({Key? key}) : super(key: key);
 
   @override
-  State<TextScreen> createState() => _TextScreenState();
+  ConsumerState<TextScreen> createState() => _TextScreenState();
 }
 
-class _TextScreenState extends State<TextScreen> {
+class _TextScreenState extends ConsumerState<TextScreen> {
   TextEditingController myControllerInKg = TextEditingController();
   TextEditingController myControllerInCm = TextEditingController();
   bool isFirstTime = true;
 
   @override
   Widget build(BuildContext context) {
-    BodyMassindex bmi = widget.bmi;
+    BodyMassIndex bmi = ref.watch(refBmi);
     if (isFirstTime) {
       myControllerInCm.text = bmi.groesse.toStringAsFixed(1);
       myControllerInKg.text = bmi.gewicht.toStringAsFixed(1);
@@ -47,23 +47,13 @@ class _TextScreenState extends State<TextScreen> {
       ),
       home: Scaffold(
         appBar: AppBar(
-          // leading: IconButton(
-          //     onPressed: () {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(builder: (context) => const Screen2()),
-          //       );
-          //     },
-          //     icon: Icon(Icons.arrow_back)),
-
           leading: TextButton(
               style: TextButton.styleFrom(padding: EdgeInsets.only(top: 5)),
               onPressed: () {
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          SliderScreen(title: 'Page 1', bmi: bmi),
+                      builder: (context) => SliderScreen(),
                     ));
               },
               child: Text(
@@ -72,114 +62,95 @@ class _TextScreenState extends State<TextScreen> {
               )),
           title: Text('ideal Gewicht'),
         ),
-        body: Container(
-          color: Color.fromARGB(255, 105, 197, 140),
-          child: Column(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.fromLTRB(10, 200, 10, 50),
-                padding: EdgeInsets.all(5),
-                color: Colors.green,
-                child: Container(
-                  width: double.infinity,
-                  height: 55,
-                  color: Colors.white70,
-                  child: Center(
-                    child: TextFormField(
-                      controller: myControllerInKg,
-                      decoration: InputDecoration(labelText: 'Gewicht in Kg'),
-                      textAlign: TextAlign.center,
-                      onChanged: (value) {
-                        if (value != null) {
-                          final input = double.tryParse(value);
-                          if (input != null) {
-                            setState(() {
-                              bmi.gewicht = input;
-                            });
-                          }
+        body: LayoutBuilder(builder: (context, constraints) {
+          return Container(
+            color: Color.fromARGB(255, 105, 197, 140),
+            height: constraints.maxHeight,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: TextWidget(
+                    label: 'Gewicht in kg',
+                    value: bmi.gewicht,
+                    controller: myControllerInKg,
+                    onChanged: (value) {
+                      if (value != null) {
+                        final input = double.tryParse(value);
+                        if (input != null) {
+                          final oldState = ref.read(refBmi);
+                          final provider = ref.read(refBmi.notifier);
+                          provider.state = BodyMassIndex(
+                            groesse: oldState.groesse,
+                            gewicht: input,
+                          );
                         }
-                      },
-                    ),
+                      }
+                    },
                   ),
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(5),
-                color: Colors.green,
-                child: Container(
-                  width: double.infinity,
-                  height: 55,
-                  color: Colors.white70,
-                  child: Center(
-                    child: TextFormField(
-                      controller: myControllerInCm,
-                      decoration: InputDecoration(labelText: 'Größe in cm'),
-                      textAlign: TextAlign.center,
-                      onChanged: (value) {
-                        if (value == null || value.isEmpty) {
-                          return;
-                        } else {
-                          setState(() {
-                            bmi.groesse = double.tryParse(value)!;
-                          });
+                Expanded(
+                  child: TextWidget(
+                    label: 'Gewicht in kg',
+                    value: bmi.gewicht,
+                    controller: myControllerInKg,
+                    onChanged: (value) {
+                      if (value != null) {
+                        final input = double.tryParse(value);
+                        if (input != null) {
+                          final oldState = ref.read(refBmi);
+                          final provider = ref.read(refBmi.notifier);
+                          provider.state = BodyMassIndex(
+                            groesse: oldState.groesse,
+                            gewicht: input,
+                          );
                         }
-                      },
-                    ),
+                      }
+                    },
                   ),
                 ),
-              ),
-              // Container(
-              // margin: EdgeInsets.all(90),
-              // padding: EdgeInsets.all(50),
-              // color: Colors.green,
-              // Container(
-              //   width: double.infinity,
-              //   height: 55,
-              //   color: _bmi > 25 || _bmi < 19 ? Colors.red : Colors.green,
-              //   child: Text(_bmi.toStringAsFixed(0)),
-              // ),
-              // ),
+                Expanded(
+                  flex: 2,
+                  child: BmiWidget(),
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
+    );
+  }
+}
 
-              // Container(
-              //   color: Colors.white,
-              //   child: TextButton(
-              //     style: TextButton.styleFrom(
-              //       padding: const EdgeInsets.all(16.0),
-              //       textStyle: const TextStyle(fontSize: 20),
-              //     ),
-              //     onPressed: () {},
-              //     child: const Text('Berechnen'),
-              //   ),
-              // ),
-              Container(
-                width: double.infinity,
-                child: Text(
-                  "dein Bmi ist:",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
+class TextWidget extends StatelessWidget {
+  TextWidget({
+    required this.value,
+    required this.label,
+    required this.onChanged,
+    required this.controller,
+    Key? key,
+  }) : super(key: key);
 
-              Container(
-                width: double.infinity,
-                child: Text(
-                  "${bmass}",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 40.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
+  final double value;
+  final String label;
+  final Function(String) onChanged;
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(20),
+      width: double.infinity,
+      height: 55,
+      child: Center(
+        child: TextFormField(
+          controller: controller,
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Colors.white70,
+            labelText: label,
           ),
+          textAlign: TextAlign.center,
+          onChanged: onChanged,
         ),
       ),
     );
