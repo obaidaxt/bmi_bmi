@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bmi_bmi/main.dart';
 import 'package:bmi_bmi/models/bmi.dart';
 import 'package:flutter/material.dart';
@@ -6,16 +8,19 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SliderWidget extends ConsumerWidget {
   const SliderWidget({
     required this.option,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final BmiOptions option;
-  static const groesse = BmiOptions.groesse;
-  static const gewicht = BmiOptions.gewicht;
 
   @override
   Widget build(BuildContext context, ref) {
+    
     final bmi = ref.watch(refBmi);
+
+    log('Größe: ${bmi.groesse}');
+    log('Gewicht: ${bmi.gewicht}');
+
     final double displayValue;
     if (option == BmiOptions.groesse) {
       displayValue = bmi.groesse;
@@ -23,7 +28,7 @@ class SliderWidget extends ConsumerWidget {
       displayValue = bmi.gewicht;
     }
     final String label;
-    if (option == bmi.groesse) {
+    if (option == BmiOptions.groesse) {
       label = 'Deine Größe ist';
     } else {
       label = 'Dein Gewicht ist';
@@ -31,19 +36,19 @@ class SliderWidget extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
+        SizedBox(
           width: double.infinity,
           child: Text(
             '$label: ${displayValue.toStringAsFixed(1)}',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 24.0,
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
         Container(
-          margin: EdgeInsets.fromLTRB(50, 50, 50, 15),
+          margin: const EdgeInsets.fromLTRB(50, 50, 50, 15),
           child: Slider(
             value: displayValue,
             onChanged: (value) {
@@ -65,7 +70,7 @@ class SliderWidget extends ConsumerWidget {
             max: 250,
             divisions: 300,
             label: bmi.groesse.round().toString(),
-            activeColor: Color.fromARGB(255, 31, 72, 141),
+            activeColor: const Color.fromARGB(255, 31, 72, 141),
             inactiveColor: Colors.blueGrey,
           ),
         ),
@@ -74,4 +79,7 @@ class SliderWidget extends ConsumerWidget {
   }
 }
 
-enum BmiOptions { groesse, gewicht }
+enum BmiOptions {
+  groesse,
+  gewicht,
+}
