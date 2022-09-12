@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:bmi_bmi/main.dart';
 import 'package:bmi_bmi/models/bmi.dart';
 import 'package:bmi_bmi/views/slider_screen/slider_screen.dart';
@@ -22,10 +20,8 @@ class _TextScreenState extends ConsumerState<TextScreen> {
   @override
   Widget build(BuildContext context) {
     BodyMassIndex bmi = ref.watch(refBmi);
-    log('Größe (T): ${bmi.groesse}');
-    log('Gewicht (T): ${bmi.gewicht}');
+
     if (isFirstTime) {
-      log('is first time');
       setState(() {
         myControllerInCm.text = bmi.groesse.toStringAsFixed(1);
         myControllerInKg.text = bmi.gewicht.toStringAsFixed(1);
@@ -40,8 +36,6 @@ class _TextScreenState extends ConsumerState<TextScreen> {
       ),
       home: Scaffold(
         appBar: AppBar(
-
-          
           leading: TextButton(
               style:
                   TextButton.styleFrom(padding: const EdgeInsets.only(top: 5)),
@@ -58,48 +52,42 @@ class _TextScreenState extends ConsumerState<TextScreen> {
               )),
           title: const Text('ideal Gewicht'),
         ),
-        body: LayoutBuilder(builder: (context, constraints) {
-          return Container(
-            color: const Color.fromARGB(255, 105, 197, 140),
-            height: constraints.maxHeight,
+        body: Container(
+          color: const Color.fromARGB(255, 105, 197, 140),
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Expanded(
-                  child: TextWidget(
-                    label: 'Groesse in cm',
-                    value: bmi.groesse,
-                    controller: myControllerInCm,
-                    onChanged: (value) {
-                      final groesse = double.tryParse(value);
-                      if (groesse != null) {
-                        final bmiNotifier = ref.read(refBmi.notifier);
-                        bmiNotifier.updateGroesse(groesse);
-                      }
-                    },
-                  ),
+                TextWidget(
+                  label: 'Groesse in cm',
+                  value: bmi.groesse,
+                  controller: myControllerInCm,
+                  onChanged: (value) {
+                    final groesse = double.tryParse(value);
+                    if (groesse != null) {
+                      final bmiNotifier = ref.read(refBmi.notifier);
+                      bmiNotifier.updateGroesse(groesse);
+                    }
+                  },
                 ),
-                Expanded(
-                  child: TextWidget(
-                    label: 'Gewicht in kg',
-                    value: bmi.gewicht,
-                    controller: myControllerInKg,
-                    onChanged: (value) {
-                      final gewicht = double.tryParse(value);
-                      if (gewicht != null) {
-                        final bmiNotifier = ref.read(refBmi.notifier);
-                        bmiNotifier.updateGewicht(gewicht);
-                      }
-                    },
-                  ),
+                TextWidget(
+                  label: 'Gewicht in kg',
+                  value: bmi.gewicht,
+                  controller: myControllerInKg,
+                  onChanged: (value) {
+                    final gewicht = double.tryParse(value);
+                    if (gewicht != null) {
+                      final bmiNotifier = ref.read(refBmi.notifier);
+                      bmiNotifier.updateGewicht(gewicht);
+                    }
+                  },
                 ),
-                const Expanded(
-                  flex: 2,
-                  child: BmiWidget(),
-                ),
+                const BmiWidget(),
               ],
             ),
-          );
-        }),
+          ),
+        ),
       ),
     );
   }

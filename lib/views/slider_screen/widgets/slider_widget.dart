@@ -51,6 +51,7 @@ class SliderWidget extends ConsumerWidget {
             value: displayValue,
             onChanged: (value) {
               final bmiNotifier = ref.read(refBmi.notifier);
+
               if (option == BmiOptions.groesse) {
                 bmiNotifier.updateGroesse(value);
               } else {

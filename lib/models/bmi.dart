@@ -27,10 +27,22 @@ class BodyMassIndex {
 class BodyMassIndexNotifier extends StateNotifier<BodyMassIndex> {
   BodyMassIndexNotifier([super.state = const BodyMassIndex()]);
   void updateGewicht(double gewicht) {
-    state = state.copyWith(gewicht: gewicht);
+    if (gewicht < 40) {
+      state = state.copyWith(gewicht: 40);
+    } else if (gewicht > 250) {
+      state = state.copyWith(gewicht: 250);
+    } else {
+      state = state.copyWith(gewicht: gewicht);
+    }
   }
 
   void updateGroesse(double groesse) {
-    state = state.copyWith(groesse: groesse);
+    if (groesse < 120) {
+      state = state.copyWith(groesse: 120);
+    } else if (groesse > 250) {
+      state = state.copyWith(groesse: 250);
+    } else {
+      state = state.copyWith(groesse: groesse);
+    }
   }
 }

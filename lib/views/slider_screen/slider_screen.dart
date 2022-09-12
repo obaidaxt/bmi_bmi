@@ -38,23 +38,20 @@ class SliderScreen extends ConsumerWidget {
         ),
         body: Container(
           color: const Color.fromARGB(255, 194, 165, 206),
-          child: Column(
-            children: const <Widget>[
-              Expanded(
-                child: SliderWidget(
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
+            child: Column(
+              children: const <Widget>[
+                SliderWidget(
                   option: BmiOptions.groesse,
                 ),
-              ),
-              Expanded(
-                child: SliderWidget(
+                SliderWidget(
                   option: BmiOptions.gewicht,
                 ),
-              ),
-              Expanded(
-                flex: 2,
-                child: BmiWidget(),
-              ),
-            ],
+                BmiWidget(),
+              ],
+            ),
           ),
         ),
       ),
