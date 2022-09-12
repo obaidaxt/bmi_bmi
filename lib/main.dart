@@ -3,7 +3,8 @@ import 'package:bmi_bmi/views/text_screen/text_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final refBmi = StateProvider<BodyMassIndex>((ref) => BodyMassIndex());
+final refBmi = StateNotifierProvider<BodyMassIndexNotifier, BodyMassIndex>(
+    (ref) => BodyMassIndexNotifier());
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));

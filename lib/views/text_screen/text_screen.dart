@@ -68,14 +68,10 @@ class _TextScreenState extends ConsumerState<TextScreen> {
                     value: bmi.groesse,
                     controller: myControllerInCm,
                     onChanged: (value) {
-                      final neueGroesse = double.tryParse(value);
-                      if (neueGroesse != null) {
-                        final oldState = ref.read(refBmi);
-                        final provider = ref.read(refBmi.notifier);
-                        provider.state = BodyMassIndex(
-                          groesse: neueGroesse,
-                          gewicht: oldState.gewicht,
-                        );
+                      final groesse = double.tryParse(value);
+                      if (groesse != null) {
+                        final bmiNotifier = ref.read(refBmi.notifier);
+                        bmiNotifier.updateGroesse(groesse);
                       }
                     },
                   ),
@@ -86,14 +82,10 @@ class _TextScreenState extends ConsumerState<TextScreen> {
                     value: bmi.gewicht,
                     controller: myControllerInKg,
                     onChanged: (value) {
-                      final input = double.tryParse(value);
-                      if (input != null) {
-                        final oldState = ref.read(refBmi);
-                        final provider = ref.read(refBmi.notifier);
-                        provider.state = BodyMassIndex(
-                          groesse: oldState.groesse,
-                          gewicht: input,
-                        );
+                      final gewicht = double.tryParse(value);
+                      if (gewicht != null) {
+                        final bmiNotifier = ref.read(refBmi.notifier);
+                        bmiNotifier.updateGewicht(gewicht);
                       }
                     },
                   ),

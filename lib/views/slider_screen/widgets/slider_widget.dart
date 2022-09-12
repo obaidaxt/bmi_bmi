@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:bmi_bmi/main.dart';
-import 'package:bmi_bmi/models/bmi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,7 +14,6 @@ class SliderWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    
     final bmi = ref.watch(refBmi);
 
     log('Größe: ${bmi.groesse}');
@@ -52,21 +50,14 @@ class SliderWidget extends ConsumerWidget {
           child: Slider(
             value: displayValue,
             onChanged: (value) {
-              final provider = ref.read(refBmi.notifier);
-              final oldState = ref.read(refBmi);
+              final bmiNotifier = ref.read(refBmi.notifier);
               if (option == BmiOptions.groesse) {
-                provider.state = BodyMassIndex(
-                  gewicht: oldState.gewicht,
-                  groesse: value,
-                );
+                bmiNotifier.updateGroesse(value);
               } else {
-                provider.state = BodyMassIndex(
-                  gewicht: value,
-                  groesse: oldState.groesse,
-                );
+                bmiNotifier.updateGewicht(value);
               }
             },
-            min: 10,
+            min: 40,
             max: 250,
             divisions: 300,
             label: bmi.groesse.round().toString(),
