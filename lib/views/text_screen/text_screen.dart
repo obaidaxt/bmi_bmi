@@ -40,6 +40,8 @@ class _TextScreenState extends ConsumerState<TextScreen> {
       ),
       home: Scaffold(
         appBar: AppBar(
+
+          
           leading: TextButton(
               style:
                   TextButton.styleFrom(padding: const EdgeInsets.only(top: 5)),
