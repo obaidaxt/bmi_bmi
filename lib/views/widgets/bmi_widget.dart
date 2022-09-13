@@ -37,14 +37,14 @@ class BmiWidget extends ConsumerWidget {
                     ),
                   ),
                   Expanded(
-                    flex: 7,
+                    flex: 10,
                     child: Container(
                       height: 50,
                       color: Colors.green,
                     ),
                   ),
                   Expanded(
-                    flex: 15,
+                    flex: 10,
                     child: Container(
                       height: 50,
                       color: Colors.red,
